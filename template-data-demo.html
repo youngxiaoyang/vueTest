@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>data 初试</title>
+    <meta name="viewport" content="width=device-width,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="Description" content=""/>
+    <meta name="Keywords" content=""/>
+    <script src="https://unpkg.com/vue"></script>
+    <style>
+        * {margin: 0;padding: 0;box-sizing: border-box;position: relative;}
+        a{color: inherit;text-decoration: none;}
+        .header {text-align: center;line-height: 44px;}
+        .footerBox {}
+        .footerFiexd {display: flex;position: fixed;bottom: 0;left: 0;right: 0;background: #fff;line-height: 1;}
+        .footerFiexd:after{content: '';display: block;height: 1px;background: #e9e9e9;position: absolute;left: 0;right: 0;top: 0;-webkit-transform: scaleY(.5);transform: scaleY(.5);-webkit-transform-origin: bottom left;transform-origin: bottom left;pointer-events: none;}
+        .footerItem{flex: 1;color: #666;text-align: center;font-size: 13px;padding: 8px 0 4px;}
+        .footerImgBox{position: relative;}
+        .footerImg {width: 36px;height: 36px;object-fit: contain;margin-bottom: 2px;}
+        .footerItemNum{background: #f63023;color: #fff;font-size: 12px;line-height: normal;padding: 0 5px;border-radius: 20px;position: absolute;top: -1px;left: calc(50% + 16px);}
+    </style>
+
+</head>
+<body>
+<div id="app">
+    <!--注意：
+        在子组件中定义prop时，使用了camelCase命名法(小驼峰命名法)。
+        由于HTML特性不区分大小写，camelCase的prop用于特性时，需要转为 kebab-case（短横线隔开）。
+        例如，在prop中定义的myName，在用作特性时需要转换为my-name。-->
+    <!--prop默认是单向绑定。当父组件的属性变化时，将传导给子组件，但是反过来不会。这是为了防止子组件无意修改了父组件的状态-->
+    <!--双向绑定
+    使用.sync显式地指定双向绑定，这使得子组件的数据修改会回传给父组件-->
+    <!--单次绑定
+    使用.once显式地指定单次绑定，单次绑定在建立之后不会同步之后的变化，这意味着即使父组件修改了数据，也不会传导给子组件。-->
+
+    <app-nav v-bind:my-title.sync="title"></app-nav>
+</div>
+
+<template id="nav">
+    <nav class="header">
+        <p>{{myTitle}}</p>
+        <input type="text" placeholder="输入标题" v-model="myTitle">
+    </nav>
+</template>
+
+</body>
+<script src="js/vue.js"></script>
+<script>
+    // 实例化vue对象
+    let app = new Vue({
+        el: '#app',
+        data: {
+            title:'data 初试'
+        },
+        /**
+         * 注意：组件实例的作用域是孤立的。
+         * 不能并且不应该在子组件的模板内直接引用父组件的数据，可以使用 props 把数据传给子组件。
+         * */
+        components:{
+          "app-nav" :{
+              template:'#nav',
+              props: ['myTitle']
+          }
+        },
+    });
+</script>
+</html>
